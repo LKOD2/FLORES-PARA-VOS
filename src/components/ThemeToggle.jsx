@@ -1,7 +1,7 @@
-export default function ThemeToggle({ theme, onToggle }) {
+export default function ThemeToggle({ theme, onToggle, floating }) {
   return (
     <button
-      className="theme-toggle"
+      className={`theme-toggle${floating ? ' theme-toggle-floating' : ''}`}
       type="button"
       onClick={onToggle}
       aria-label={theme === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'}

@@ -73,9 +73,7 @@ a{ color:inherit; }
 
 /* ---------- theme toggle ---------- */
 .theme-toggle{
-  position:fixed;
-  top:16px; right:16px;
-  z-index:20;
+  flex:none;
   width:40px; height:40px;
   border-radius:50%;
   background:var(--paper);
@@ -87,6 +85,11 @@ a{ color:inherit; }
   align-items:center;
   justify-content:center;
   cursor:pointer;
+}
+.theme-toggle-floating{
+  position:fixed;
+  top:16px; right:16px;
+  z-index:20;
 }
 
 /* ---------- signature ---------- */
@@ -103,16 +106,50 @@ a{ color:inherit; }
 }
 .signature a:hover{ color:var(--accent); }
 
+/* ---------- app shell: header floats fixed+transparent over everything,
+   the page itself never scrolls — only the composer's own content does ---------- */
+.app-shell{
+  position:relative;
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+}
+.app-header{
+  position:fixed;
+  top:0; left:0; right:0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 20px;
+  background:transparent;
+  z-index:10;
+}
+.app-header-title{
+  font-family:"Fraunces", Georgia, serif;
+  font-weight:600;
+  font-size:1.05rem;
+  color:var(--ink);
+}
+@media (max-width:420px){
+  .app-header{ padding:12px 16px; }
+  .app-header-title{ font-size:0.95rem; }
+}
+
 /* ---------- composer ---------- */
 .composer{
   position:relative;
-  min-height:100vh;
+  height:100%;
+  overflow-y:auto;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
+  justify-content:safe center;
   gap:18px;
-  padding:40px 16px;
+  padding:76px 16px 40px;
+}
+@media (max-width:420px){
+  .composer{ padding-top:68px; }
 }
 .composer-card{
   position:relative;
@@ -142,8 +179,10 @@ a{ color:inherit; }
   animation-delay:var(--fdelay, 0s);
 }
 @keyframes float-drift{
-  0%, 100%{ transform:translate(0,0) rotate(0deg); }
-  50%{ transform:translate(var(--fx, 20px), var(--fy, -30px)) rotate(var(--fr, 12deg)); }
+  0%{ transform:translate(0,0) rotate(0deg); }
+  33%{ transform:translate(var(--fx1, 26vw), var(--fy1, -18vh)) rotate(var(--fr1, 14deg)); }
+  66%{ transform:translate(var(--fx2, -20vw), var(--fy2, -14vh)) rotate(var(--fr2, -8deg)); }
+  100%{ transform:translate(0,0) rotate(0deg); }
 }
 .eyebrow{
   margin:0 0 6px;

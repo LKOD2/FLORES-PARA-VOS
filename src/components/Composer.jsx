@@ -4,12 +4,13 @@ import NoteColorPicker from './NoteColorPicker.jsx'
 import QrModal from './QrModal.jsx'
 import Signature from './Signature.jsx'
 import FloatingPetals from './FloatingPetals.jsx'
+import Header from './Header.jsx'
 import { encodePayload } from '../payload.js'
 import { DEFAULT_NOTE_COLOR } from '../noteColors.js'
 
 const MAX_LEN = 300
 
-export default function Composer() {
+export default function Composer({ theme, onToggleTheme }) {
   const [design, setDesign] = useState('garden')
   const [noteColor, setNoteColor] = useState(DEFAULT_NOTE_COLOR)
   const [toName, setToName] = useState('')
@@ -38,76 +39,80 @@ export default function Composer() {
   }
 
   return (
-    <main className="composer">
+    <div className="app-shell">
       <FloatingPetals />
-      <div className="composer-card">
-        <p className="eyebrow">Flores para ti</p>
-        <h1>Crea una tarjeta y compártela</h1>
-        <p className="lede">
-          Escribe tu mensaje, elige un diseño y genera un código QR para que ella lo abra.
-        </p>
+      <Header theme={theme} onToggleTheme={onToggleTheme} />
 
-        <form onSubmit={handleSubmit} noValidate>
-          <DesignPicker value={design} onChange={setDesign} />
-          <NoteColorPicker value={noteColor} onChange={setNoteColor} />
+      <main className="composer">
+        <div className="composer-card">
+          <p className="eyebrow">Flores para ti</p>
+          <h1>Crea una tarjeta y compártela</h1>
+          <p className="lede">
+            Escribe tu mensaje, elige un diseño y genera un código QR para que ella lo abra.
+          </p>
 
-          <div className="field">
-            <label htmlFor="toName">Para (opcional)</label>
-            <input
-              type="text"
-              id="toName"
-              maxLength={40}
-              placeholder="Su nombre"
-              value={toName}
-              onChange={(e) => setToName(e.target.value)}
-            />
-          </div>
+          <form onSubmit={handleSubmit} noValidate>
+            <DesignPicker value={design} onChange={setDesign} />
+            <NoteColorPicker value={noteColor} onChange={setNoteColor} />
 
-          <div className="field">
-            <label htmlFor="msgText">Tu mensaje</label>
-            <textarea
-              id="msgText"
-              maxLength={MAX_LEN}
-              rows={4}
-              placeholder="Escribe lo que quieras decirle..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
-          </div>
-          <div className="counter">
-            <span>{message.length}</span>/{MAX_LEN}
-          </div>
-          {error && <p className="error">Escribe un mensaje antes de crear la tarjeta.</p>}
+            <div className="field">
+              <label htmlFor="toName">Para (opcional)</label>
+              <input
+                type="text"
+                id="toName"
+                maxLength={40}
+                placeholder="Su nombre"
+                value={toName}
+                onChange={(e) => setToName(e.target.value)}
+              />
+            </div>
 
-          <div className="field">
-            <label htmlFor="fromName">De (opcional)</label>
-            <input
-              type="text"
-              id="fromName"
-              maxLength={40}
-              placeholder="Tu nombre"
-              value={fromName}
-              onChange={(e) => setFromName(e.target.value)}
-            />
-          </div>
+            <div className="field">
+              <label htmlFor="msgText">Tu mensaje</label>
+              <textarea
+                id="msgText"
+                maxLength={MAX_LEN}
+                rows={4}
+                placeholder="Escribe lo que quieras decirle..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+            </div>
+            <div className="counter">
+              <span>{message.length}</span>/{MAX_LEN}
+            </div>
+            {error && <p className="error">Escribe un mensaje antes de crear la tarjeta.</p>}
 
-          <button className="primary" type="submit">
-            Crear tarjeta y generar QR
-          </button>
-        </form>
+            <div className="field">
+              <label htmlFor="fromName">De (opcional)</label>
+              <input
+                type="text"
+                id="fromName"
+                maxLength={40}
+                placeholder="Tu nombre"
+                value={fromName}
+                onChange={(e) => setFromName(e.target.value)}
+              />
+            </div>
 
-        {shareUrl && !modalOpen && (
-          <div className="share-recap">
-            <button className="ghost" type="button" onClick={() => setModalOpen(true)}>
-              Ver código QR
+            <button className="primary" type="submit">
+              Crear tarjeta y generar QR
             </button>
-          </div>
-        )}
-      </div>
+          </form>
 
-      <Signature />
+          {shareUrl && !modalOpen && (
+            <div className="share-recap">
+              <button className="ghost" type="button" onClick={() => setModalOpen(true)}>
+                Ver código QR
+              </button>
+            </div>
+          )}
+        </div>
 
-      {modalOpen && shareUrl && <QrModal url={shareUrl} onClose={() => setModalOpen(false)} />}
-    </main>
+        <Signature />
+
+        {modalOpen && shareUrl && <QrModal url={shareUrl} onClose={() => setModalOpen(false)} />}
+      </main>
+    </div>
   )
 }
