@@ -1,18 +1,23 @@
-import { useRef, useState } from 'react'
-import { QRCodeSVG } from 'qrcode.react'
+import { useState } from 'react'
 import DesignPicker from './DesignPicker.jsx'
+import NoteColorPicker from './NoteColorPicker.jsx'
+import QrModal from './QrModal.jsx'
+import Signature from './Signature.jsx'
+import FloatingPetals from './FloatingPetals.jsx'
+import { encodePayload } from '../payload.js'
+import { DEFAULT_NOTE_COLOR } from '../noteColors.js'
 
 const MAX_LEN = 300
 
 export default function Composer() {
   const [design, setDesign] = useState('garden')
+  const [noteColor, setNoteColor] = useState(DEFAULT_NOTE_COLOR)
   const [toName, setToName] = useState('')
   const [message, setMessage] = useState('')
   const [fromName, setFromName] = useState('')
   const [error, setError] = useState(false)
   const [shareUrl, setShareUrl] = useState(null)
-  const [copied, setCopied] = useState(false)
-  const linkRef = useRef(null)
+  const [modalOpen, setModalOpen] = useState(false)
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -23,35 +28,18 @@ export default function Composer() {
     }
     setError(false)
 
-    const params = new URLSearchParams()
-    if (design === 'bloom') params.set('d', 'bloom')
-    if (toName.trim()) params.set('to', toName.trim())
-    params.set('msg', msg)
-    if (fromName.trim()) params.set('from', fromName.trim())
+    const payload = { d: design, msg, nc: noteColor }
+    if (toName.trim()) payload.to = toName.trim()
+    if (fromName.trim()) payload.from = fromName.trim()
 
-    const url = window.location.origin + window.location.pathname + '#' + params.toString()
+    const url = `${window.location.origin}${window.location.pathname}#p=${encodePayload(payload)}`
     setShareUrl(url)
-    setCopied(false)
-  }
-
-  async function handleCopy() {
-    if (!shareUrl) return
-    try {
-      await navigator.clipboard.writeText(shareUrl)
-      setCopied(true)
-    } catch {
-      const el = linkRef.current
-      if (el) {
-        el.select()
-        document.execCommand('copy')
-        setCopied(true)
-      }
-    }
-    setTimeout(() => setCopied(false), 1800)
+    setModalOpen(true)
   }
 
   return (
     <main className="composer">
+      <FloatingPetals />
       <div className="composer-card">
         <p className="eyebrow">Flores para ti</p>
         <h1>Crea una tarjeta y compártela</h1>
@@ -61,6 +49,7 @@ export default function Composer() {
 
         <form onSubmit={handleSubmit} noValidate>
           <DesignPicker value={design} onChange={setDesign} />
+          <NoteColorPicker value={noteColor} onChange={setNoteColor} />
 
           <div className="field">
             <label htmlFor="toName">Para (opcional)</label>
@@ -107,24 +96,18 @@ export default function Composer() {
           </button>
         </form>
 
-        {shareUrl && (
-          <div className="share-result">
-            <div className="qr-wrap">
-              <QRCodeSVG value={shareUrl} size={180} bgColor="#FFFBEA" fgColor="#2C3A1E" level="M" />
-            </div>
-            <p className="hint">Escanéalo o comparte el enlace para que ella lo abra</p>
-            <div className="link-row">
-              <input type="text" readOnly value={shareUrl} ref={linkRef} aria-label="Enlace para compartir" />
-              <button className={`copy-btn${copied ? ' copied' : ''}`} type="button" onClick={handleCopy}>
-                {copied ? '¡Copiado!' : 'Copiar'}
-              </button>
-            </div>
-            <a className="preview-link" href={shareUrl} target="_blank" rel="noopener noreferrer">
-              Ver vista previa ↗
-            </a>
+        {shareUrl && !modalOpen && (
+          <div className="share-recap">
+            <button className="ghost" type="button" onClick={() => setModalOpen(true)}>
+              Ver código QR
+            </button>
           </div>
         )}
       </div>
+
+      <Signature />
+
+      {modalOpen && shareUrl && <QrModal url={shareUrl} onClose={() => setModalOpen(false)} />}
     </main>
   )
 }

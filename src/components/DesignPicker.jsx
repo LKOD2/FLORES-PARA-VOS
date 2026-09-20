@@ -19,6 +19,17 @@ const OPTIONS = [
     desc: 'Toca la flor y el mensaje aparece',
     preview: <MiniBud />,
   },
+  {
+    id: 'envelope',
+    label: 'Sobre',
+    desc: 'Se abre entre flores',
+    preview: (
+      <span className="mini-envelope">
+        <span className="body" />
+        <span className="flap" />
+      </span>
+    ),
+  },
 ]
 
 export default function DesignPicker({ value, onChange }) {

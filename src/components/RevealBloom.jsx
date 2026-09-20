@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import Meadow from './Meadow.jsx'
+import FlowerBurst from './FlowerBurst.jsx'
 
 export default function RevealBloom({ to, msg, from, onReset }) {
   const [open, setOpen] = useState(false)
@@ -19,29 +21,33 @@ export default function RevealBloom({ to, msg, from, onReset }) {
 
   return (
     <section className="reveal-bloom">
+      <Meadow />
       <div className="bloom-stage">
         {!open && <p className="bloom-hint">Toca la flor</p>}
-        <button
-          className={`flower-bloom${open ? ' open' : ''}`}
-          type="button"
-          disabled={open}
-          onClick={() => setOpen(true)}
-          aria-label="Abrir la flor para ver el mensaje"
-        >
-          <span className="petal" />
-          <span className="petal" />
-          <span className="petal" />
-          <span className="petal" />
-          <span className="petal" />
-          <span className="petal" />
-          <span className="petal" />
-          <span className="petal" />
-          <span className="flower-center" />
-        </button>
+        <div className="bloom-flower-wrap">
+          <button
+            className={`flower-bloom${open ? ' open' : ''}`}
+            type="button"
+            disabled={open}
+            onClick={() => setOpen(true)}
+            aria-label="Abrir la flor para ver el mensaje"
+          >
+            <span className="petal" />
+            <span className="petal" />
+            <span className="petal" />
+            <span className="petal" />
+            <span className="petal" />
+            <span className="petal" />
+            <span className="petal" />
+            <span className="petal" />
+            <span className="flower-center" />
+          </button>
+          <FlowerBurst open={open} />
+        </div>
         {mounted && (
           <div className={`bloom-message${visible ? ' in' : ''}`}>
             <p className="eyebrow">{to ? `Para ${to}` : 'Para ti'}</p>
-            <p className="reveal-msg">{msg}</p>
+            <p className="reveal-msg" style={{ '--msg-len': msg.length }}>{msg}</p>
             {from && <p className="reveal-from">{`— ${from}`}</p>}
           </div>
         )}
