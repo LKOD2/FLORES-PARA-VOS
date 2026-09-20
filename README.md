@@ -17,3 +17,8 @@ npm run dev
 ## Licencia
 
 [Apache License 2.0](LICENSE)
+
+---
+
+<img src="https://github.com/lkod2.png" width="48" height="48" style="border-radius:50%"><br>
+Hecho por [lkod](https://github.com/lkod2)
