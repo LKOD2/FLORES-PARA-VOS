@@ -4,13 +4,12 @@ import NoteColorPicker from './NoteColorPicker.jsx'
 import QrModal from './QrModal.jsx'
 import Signature from './Signature.jsx'
 import FloatingPetals from './FloatingPetals.jsx'
-import Header from './Header.jsx'
 import { encodePayload } from '../payload.js'
 import { DEFAULT_NOTE_COLOR } from '../noteColors.js'
 
 const MAX_LEN = 300
 
-export default function Composer({ theme, onToggleTheme }) {
+export default function Composer() {
   const [design, setDesign] = useState('garden')
   const [noteColor, setNoteColor] = useState(DEFAULT_NOTE_COLOR)
   const [toName, setToName] = useState('')
@@ -41,7 +40,6 @@ export default function Composer({ theme, onToggleTheme }) {
   return (
     <div className="app-shell">
       <FloatingPetals />
-      <Header theme={theme} onToggleTheme={onToggleTheme} />
 
       <main className="composer">
         <div className="composer-card">

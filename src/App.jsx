@@ -15,24 +15,24 @@ export default function App() {
     window.location.hash = ''
   }
 
-  if (!msg) {
-    return <Composer theme={theme} onToggleTheme={toggleTheme} />
-  }
-
-  const to = (payload.to || '').trim()
-  const from = (payload.from || '').trim()
-  const noteColor = payload.nc
-  const key = window.location.hash
-  const props = { key, to, msg, from, noteColor, theme, onReset: reset }
-
   let view
-  if (payload.d === 'bloom') view = <RevealBloom {...props} />
-  else if (payload.d === 'envelope') view = <RevealEnvelope {...props} />
-  else view = <RevealGarden {...props} />
+  if (!msg) {
+    view = <Composer />
+  } else {
+    const to = (payload.to || '').trim()
+    const from = (payload.from || '').trim()
+    const noteColor = payload.nc
+    const key = window.location.hash
+    const props = { key, to, msg, from, noteColor, theme, onReset: reset }
+
+    if (payload.d === 'bloom') view = <RevealBloom {...props} />
+    else if (payload.d === 'envelope') view = <RevealEnvelope {...props} />
+    else view = <RevealGarden {...props} />
+  }
 
   return (
     <>
-      <ThemeToggle theme={theme} onToggle={toggleTheme} floating />
+      <ThemeToggle theme={theme} onToggle={toggleTheme} />
       {view}
     </>
   )
