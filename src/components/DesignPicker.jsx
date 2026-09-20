@@ -9,7 +9,6 @@ const OPTIONS = [
       <>
         <MiniFlower size={20} />
         <MiniFlower size={14} />
-        <span className="mini-note" />
       </>
     ),
   },
