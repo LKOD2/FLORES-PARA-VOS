@@ -4,3 +4,5 @@ dist
 *.log
 .claude/
 instructions.md
+.agents/
+skills-lock.json
